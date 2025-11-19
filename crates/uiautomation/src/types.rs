@@ -274,9 +274,10 @@ impl AsRef<HANDLE> for Handle {
 
 impl From<isize> for Handle {
     fn from(value: isize) -> Self {
-        let hwd: *mut c_void = unsafe {
-            std::mem::transmute(value)
-        };
+        // let hwd: *mut c_void = unsafe {
+        //     std::mem::transmute(value)
+        // };
+        let hwd: *mut c_void = std::ptr::with_exposed_provenance_mut(value as _);
         Self(HANDLE(hwd))
     }
 }
@@ -1294,6 +1295,7 @@ mod tests {
     #[test]
     fn test_handle() {
         let handle = crate::types::Handle::from(0x001);
-        assert_eq!(windows::Win32::Foundation::HWND(unsafe { std::mem::transmute(0x001isize) } ), handle.into());
+        // assert_eq!(windows::Win32::Foundation::HWND(unsafe { std::mem::transmute(0x001isize) } ), handle.into());
+        assert_eq!(windows::Win32::Foundation::HWND(std::ptr::with_exposed_provenance_mut(0x001usize)), handle.into());
     }
 }

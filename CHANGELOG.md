@@ -325,3 +325,7 @@
 ## v0.24.1
 
 + Update to `windows v0.62.2`.
+
+## v0.24.2
+
++ Update deps & `cargo v1.19.1`.
